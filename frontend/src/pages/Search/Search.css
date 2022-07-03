@@ -1,0 +1,8 @@
+.search {
+  width: 90%;
+  margin: 50px auto;
+}
+
+input[type='radio'] {
+  display: none;
+}
