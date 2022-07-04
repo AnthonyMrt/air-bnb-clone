@@ -1,3 +1,4 @@
+import Location from '../models/location';
 import { LocationDTO } from './dto/location.dto';
 
 export default class LocationAPI {
@@ -14,7 +15,7 @@ export default class LocationAPI {
       .catch((error) => this.handleError(error));
   }
 
-  static async addLocation(location: LocationDTO): Promise<LocationDTO[]> {
+  static async addLocation(location: Location): Promise<LocationDTO[]> {
     return await fetch('http://localhost:8000/locations/create', {
       method: 'POST',
       body: JSON.stringify(location),

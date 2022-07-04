@@ -10,7 +10,7 @@ const SearchPage: React.FC<SearchPageProps> = () => {
   const [locations, setLocations] = useState<LocationDTO[]>([]);
   const [orderBy, setOrderBy] = useState<String>('');
 
-  const tableHeader = ['Categorie', 'NumberOfRooms', 'Prix'];
+  const tableHeader = ['Categorie', 'Chambres', 'Prix'];
 
   useEffect(() => {
     async function fetchAllLocation() {
@@ -39,42 +39,50 @@ const SearchPage: React.FC<SearchPageProps> = () => {
 
   return (
     <div className="search">
-      <ul style={{ listStyle: 'none' }} className="search-header">
-        {tableHeader.map((el) => (
-          <li key={el}>
-            <input
-              type="radio"
-              name="header-el"
-              id={el}
-              defaultChecked={el === orderBy || el === orderBy + 'reverse' ? true : false}
-              onClick={(e) => handleLocationSorted(e)}
-            />
-            <label htmlFor={el}>{el}</label>
-          </li>
-        ))}
-      </ul>
-      {locations
-        .sort((a, b) => {
-          switch (orderBy) {
-            case 'Categorie':
-              return a.categoryId - b.categoryId;
-            case 'NumberOfRooms':
-              return a.numberOfRooms - b.numberOfRooms;
-            case 'Prix':
-              return a.price - b.price;
-            case 'Categoryreverse':
-              return b.categoryId - a.categoryId;
-            case 'Prixreverse':
-              return b.price - a.price;
-            case 'NumberOfRoomsreverse':
-              return b.numberOfRooms - a.numberOfRooms;
-            default:
-              return a.id - b.id;
-          }
-        })
-        .map((location) => {
-          return <Card key={location.id} location={location} />;
-        })}
+      <section className="m-2 border-b ">
+        <ul className="flex justify-around ">
+          {tableHeader.map((el) => (
+            <li key={el} className=" m-2 rounded-md">
+              <input
+                type="radio"
+                name="header-el"
+                id={el}
+                defaultChecked={el === orderBy || el === orderBy + 'reverse' ? true : false}
+                onClick={(e) => handleLocationSorted(e)}
+              />
+              <label
+                className="text-vert font-bold tracking-wider uppercase font-inter "
+                htmlFor={el}>
+                {el}
+              </label>
+            </li>
+          ))}
+        </ul>
+      </section>
+      <div className="grid grid-cols-4">
+        {locations
+          .sort((a, b) => {
+            switch (orderBy) {
+              case 'Categorie':
+                return a.categoryId - b.categoryId;
+              case 'Chambres':
+                return a.numberOfRooms - b.numberOfRooms;
+              case 'Prix':
+                return a.price - b.price;
+              case 'Categoryreverse':
+                return b.categoryId - a.categoryId;
+              case 'Prixreverse':
+                return b.price - a.price;
+              case 'Chambrereverse':
+                return b.numberOfRooms - a.numberOfRooms;
+              default:
+                return a.id - b.id;
+            }
+          })
+          .map((location) => {
+            return <Card key={location.id} location={location} />;
+          })}
+      </div>
     </div>
   );
 };

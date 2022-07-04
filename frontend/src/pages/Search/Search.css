@@ -1,6 +1,7 @@
 .search {
+  @include font-face;
   width: 90%;
-  margin: 50px auto;
+  margin: auto;
 }
 
 input[type='radio'] {
