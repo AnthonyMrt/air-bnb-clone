@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Category } from '../categories/Category.entity';
 import { updateLocationDto } from './Location.dto';
 import { Location } from './Location.entity';
 import { LocationI } from './Locations.interface';
@@ -10,13 +11,12 @@ export class LocationService {
   constructor(
     @InjectRepository(Location)
     private locationRepository: Repository<Location>,
+    @InjectRepository(Category)
+    private categoryRepository: Repository<Category>,
   ) {}
 
   async getLocations(): Promise<Location[]> {
-    const qb = this.locationRepository
-      .createQueryBuilder('l')
-      .innerJoinAndSelect('l.category', 'c');
-    const result = await qb.getMany();
+    const result = this.locationRepository.find({ relations: ['category'] });
 
     return result;
   }
@@ -31,6 +31,25 @@ export class LocationService {
   }
 
   async createLocation(location: LocationI): Promise<LocationI> {
+    const category = await this.categoryRepository.findOne({
+      where: [{ name: location.category }],
+    });
+    let newCat;
+
+    if (!category) {
+      newCat = await this.categoryRepository.save(
+        this.categoryRepository.create({
+          name: String(location.category),
+          description: 'new drescription',
+        }),
+      );
+      const categoryId = newCat.id;
+      location.categoryId = categoryId;
+      console.log(location);
+    } else {
+      location.category = category;
+    }
+
     return await this.locationRepository.save(
       this.locationRepository.create(location),
     );
@@ -55,7 +74,7 @@ export class LocationService {
   async searchLocation(title: string): Promise<Location[]> {
     const qb = this.locationRepository
       .createQueryBuilder('location')
-      .where('location.title like :title', { title: '%' + title + '%' });
+      .where('LOWER(location.title) like :title', { title: '%' + title + '%' });
 
     const result = await qb.getMany();
 

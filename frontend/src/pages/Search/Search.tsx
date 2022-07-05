@@ -53,7 +53,7 @@ const SearchPage: React.FC<SearchPageProps> = () => {
         <ul className="flex justify-around ">
           <li>
             <select
-              className="py-2.5 px-0 w-full text-base text-gray-500 bg-transparent  border-gray-400 appearance-none dark:text-gray-500 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+              className="font-inter py-2.5 px-0 w-full text-base text-gray-500 bg-transparent  border-gray-400 appearance-none dark:text-gray-500 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
               id="sortCat"
               onChange={handleCategoriesSorted}>
               <option value="">Filtrer par categorie</option>
@@ -67,7 +67,7 @@ const SearchPage: React.FC<SearchPageProps> = () => {
             </select>
           </li>
           {tableHeader.map((el) => (
-            <li key={el} className=" m-2 rounded-md">
+            <li key={el} className="font-inter m-2 rounded-md">
               <input
                 type="radio"
                 name="header-el"
@@ -84,7 +84,7 @@ const SearchPage: React.FC<SearchPageProps> = () => {
           ))}
         </ul>
       </section>
-      <div className="grid grid-cols-4 gap-1">
+      <div className="cardLocation flex flex-wrap justify-around">
         {locations
           .filter((a) => {
             if (orderByCat !== '') {

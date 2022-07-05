@@ -126,7 +126,7 @@ const LocationForm: FunctionComponent<Props> = ({ location, isEditForm }) => {
       location.numberOfRooms = form.numberOfRooms.value;
       location.price = form.price.value;
       location.categoryId = form.categoryId.value;
-      isEditForm ? updateLocation() : addLocation();
+      updateLocation();
     }
   };
 
@@ -138,10 +138,6 @@ const LocationForm: FunctionComponent<Props> = ({ location, isEditForm }) => {
 
   const isAddForm = (): boolean => {
     return !isEditForm;
-  };
-
-  const addLocation = () => {
-    LocationAPI.addLocation(location).then(() => navigate(`/locations/create`));
   };
 
   const updateLocation = () => {
@@ -166,16 +162,19 @@ const LocationForm: FunctionComponent<Props> = ({ location, isEditForm }) => {
       <img className="w-full h-80" src={location.picture} alt={location.title} />
       <div className="display-location-content mt-16 mx-20">
         <div className="display-location-details">
-          <p className="font-bold text-stone-600 lg:text-2xl md:text-base sm:text-xs mb-2">
+          <p className="font-bold font-inter text-stone-600 lg:text-2xl md:text-base sm:text-xs mb-2">
             {location.title}, {location.location}
           </p>
-          <p className="text-gray-700 md:text-base sm:text-xs mb-2 ">
+          <p className="font-inter text-gray-700 md:text-base sm:text-xs mb-2 ">
             {location.category.name} &#8226; {location.numberOfRooms} rooms{' '}
           </p>
-          <p className="text-gray-700 md:text-base sm:text-xs max-w-md">{location.description}</p>
+          <p className="font-inter text-gray-700 md:text-base sm:text-xs max-w-md">
+            {location.description}
+          </p>
         </div>
-        <div className="font-bold text-stone-600 lg:text-2xl md:text-base sm:text-xs mb-2">
-          € {priceFormater(location.price)} <span className="text-normal font-normal">night</span>
+        <div className="font-bold font-inter text-stone-600 lg:text-2xl md:text-base sm:text-xs mb-2">
+          € {priceFormater(location.price)}{' '}
+          <span className="font-inter text-normal font-normal">night</span>
         </div>
         <div className="display-location-edit">
           <form onSubmit={(e) => handleSubmit(e)} className="m-5">
@@ -186,7 +185,7 @@ const LocationForm: FunctionComponent<Props> = ({ location, isEditForm }) => {
                   id="price"
                   type="number"
                   name="price"
-                  className="form-control shadow appearance-none border rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="form-control font-inter shadow appearance-none border rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   value={form.price.value}
                   onChange={(e) => handleInputChange(e)}></input>
                 {/* error */}

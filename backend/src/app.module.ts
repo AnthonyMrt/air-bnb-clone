@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { LocationModule } from './modules/locations/Location.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule } from '@nestjs/graphql';
+import { CategoriesModule } from './modules/categories/Categories.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { GraphQLModule } from '@nestjs/graphql';
       autoLoadEntities: true,
     }),
     LocationModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

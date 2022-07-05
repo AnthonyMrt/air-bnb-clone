@@ -1,3 +1,4 @@
+import { Category } from '../categories/Category.entity';
 export interface LocationI {
   id: number;
   title: string;
@@ -8,4 +9,5 @@ export interface LocationI {
   numberOfRooms: number;
   price: number;
   categoryId: number;
+  category: Category;
 }

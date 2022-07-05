@@ -9,18 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { LocationService } from './Location.service';
-
-export interface CreateLocationDto {
-  id: number;
-  title: string;
-  description: string;
-  location: string;
-  picture: string;
-  stars: number;
-  numberOfRooms: number;
-  price: number;
-  categoryId: number;
-}
+import { LocationI } from './Locations.interface';
 
 @Controller('locations')
 export class LocationController {
@@ -42,13 +31,12 @@ export class LocationController {
   //get Location By Name
   @Get('/search/?')
   async getLocationByname(@Query('title') title: string) {
-    console.log(title);
     return this.locationService.searchLocation(title);
   }
 
   //create location
   @Post('/create')
-  async create(@Body() createLocationDto: CreateLocationDto) {
+  async create(@Body() createLocationDto: LocationI) {
     const location = await this.locationService.createLocation(
       createLocationDto,
     );

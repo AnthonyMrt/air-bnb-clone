@@ -1,10 +1,11 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import './CreateLocation.css';
 //import CardForm from '../../components/Forms/CardForm';
 //import Location from '../../models/location';
 import Location from '../../models/location';
 import LocationAPI from '../../services/services';
 import { useNavigate } from 'react-router-dom';
+import { CategoriesDTO } from '../../services/dto/categories.dto';
 //import { LocationDTO } from '../../services/dto/location.dto';
 //import { CategoriesDTO } from '../../services/dto/categories.dto';
 
@@ -26,30 +27,13 @@ type Form = {
   category: Field;
 };
 
-const categoryList = [
-  {
-    id: 1,
-    name: 'hotel'
-  },
-  {
-    id: 2,
-    name: 'appartement'
-  },
-  {
-    id: 3,
-    name: 'guesthouse'
-  },
-  {
-    id: 4,
-    name: 'villa'
-  }
-];
-
 const CreateLocationPage: FunctionComponent = () => {
   const navigate = useNavigate();
 
   const [id] = useState<number>(Math.floor(Math.random() * 100));
   const [location] = useState<Location>(new Location(id));
+  const [categories, setCategories] = useState<CategoriesDTO[]>([]);
+
   const [form, setForm] = useState<Form>({
     picture: { value: location.picture },
     title: { value: location.title, isValid: true },
@@ -61,6 +45,16 @@ const CreateLocationPage: FunctionComponent = () => {
     categoryId: { value: location.categoryId, isValid: true },
     category: { value: location.category }
   });
+
+  useEffect(() => {
+    async function fetchAllCategories() {
+      const cat = await LocationAPI.getCategories();
+
+      setCategories(cat);
+    }
+
+    fetchAllCategories();
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const fieldName: string = e.target.name;
@@ -161,7 +155,7 @@ const CreateLocationPage: FunctionComponent = () => {
       newForm = { ...newForm, ...{ stars: newField } };
     }
 
-    if (!/^[0-100]{1}$/.test(form.numberOfRooms.value)) {
+    if (!/^[0-99]{1,2}$/.test(form.numberOfRooms.value)) {
       const errorMsg: string = 'Veuillez renseigner le nombre de chambres';
       const newField: Field = {
         value: form.numberOfRooms.value,
@@ -178,9 +172,8 @@ const CreateLocationPage: FunctionComponent = () => {
       newForm = { ...newForm, ...{ numberOfRooms: newField } };
     }
 
-    //console.log(newForm);
     setForm(newForm);
-    return newForm.price.isValid && newForm.title.isValid;
+    return newForm.price.isValid && newForm.title.isValid && newForm.stars.isValid;
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -297,6 +290,8 @@ const CreateLocationPage: FunctionComponent = () => {
                   id="stars"
                   type="number"
                   placeholder="Note"
+                  min="0"
+                  max="5"
                   value={form.stars.value}
                   name="stars"
                   onChange={(e) => handleInputChange(e)}
@@ -359,7 +354,7 @@ const CreateLocationPage: FunctionComponent = () => {
                   onChange={(e) => handleInputChange(e)}
                 />
                 <datalist id="select">
-                  {categoryList.map((cat) => {
+                  {categories.map((cat) => {
                     return (
                       <option key={cat.id} value={cat.name}>
                         {cat.name}
