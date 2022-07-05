@@ -24,7 +24,6 @@ type Form = {
   numberOfRooms: Field;
   price: Field;
   categoryId: Field;
-  category: Field;
 };
 
 const LocationForm: FunctionComponent<Props> = ({ location, isEditForm }) => {
@@ -38,8 +37,7 @@ const LocationForm: FunctionComponent<Props> = ({ location, isEditForm }) => {
     stars: { value: location.stars, isValid: true },
     numberOfRooms: { value: location.numberOfRooms, isValid: true },
     price: { value: location.price, isValid: true },
-    categoryId: { value: location.categoryId, isValid: true },
-    category: { value: location.category.name, isValid: true }
+    categoryId: { value: location.categoryId, isValid: true }
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -133,7 +131,9 @@ const LocationForm: FunctionComponent<Props> = ({ location, isEditForm }) => {
   };
 
   const deleteLocation = () => {
-    LocationAPI.deleteLocation(location.id).then(() => navigate(`/`));
+    LocationAPI.deleteLocation(location.id);
+
+    navigate('/');
   };
 
   const isAddForm = (): boolean => {
@@ -198,11 +198,11 @@ const LocationForm: FunctionComponent<Props> = ({ location, isEditForm }) => {
               <div className="flex justify-around my-5">
                 <button
                   onClick={deleteLocation}
-                  className="button border text-emerald-200 rounded-3xl hover:bg-emerald-400 mx-2 hover:text-white py-2 px-8 w-3/6 border-emerald-200">
+                  className="button border text-emerald-200 rounded-3xl  md:text-sm sm:text-xs hover:bg-emerald-400 mx-2 hover:text-white py-2 w-3/6 border-emerald-200">
                   delete
                 </button>
                 <button
-                  className="button text-white rounded-3xl hover:bg-emerald-400 bg-emerald-200 py-2 w-3/6"
+                  className="button text-white md:text-sm sm:text-xs rounded-3xl hover:bg-emerald-400 bg-emerald-200 py-2 w-3/6"
                   type="submit">
                   Valider
                 </button>

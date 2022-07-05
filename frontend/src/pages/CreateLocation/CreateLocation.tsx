@@ -5,6 +5,8 @@ import './CreateLocation.css';
 import Location from '../../models/location';
 import LocationAPI from '../../services/services';
 import { useNavigate } from 'react-router-dom';
+//import { LocationDTO } from '../../services/dto/location.dto';
+//import { CategoriesDTO } from '../../services/dto/categories.dto';
 
 type Field = {
   value?: any;
@@ -21,7 +23,27 @@ type Form = {
   numberOfRooms: Field;
   price: Field;
   categoryId: Field;
+  category: Field;
 };
+
+const categoryList = [
+  {
+    id: 1,
+    name: 'hotel'
+  },
+  {
+    id: 2,
+    name: 'appartement'
+  },
+  {
+    id: 3,
+    name: 'guesthouse'
+  },
+  {
+    id: 4,
+    name: 'villa'
+  }
+];
 
 const CreateLocationPage: FunctionComponent = () => {
   const navigate = useNavigate();
@@ -36,7 +58,8 @@ const CreateLocationPage: FunctionComponent = () => {
     stars: { value: location.stars, isValid: true },
     numberOfRooms: { value: location.numberOfRooms, isValid: true },
     price: { value: location.price, isValid: true },
-    categoryId: { value: location.categoryId, isValid: true }
+    categoryId: { value: location.categoryId, isValid: true },
+    category: { value: location.category }
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -86,6 +109,23 @@ const CreateLocationPage: FunctionComponent = () => {
       newForm = { ...newForm, ...{ title: newField } };
     }
 
+    if (!/^[a-zA-Zàéè ]{3,150}$/.test(form.category.value)) {
+      const errorMsg: string = 'Veuillez entre un nom de catégorie valide';
+      const newField: Field = {
+        value: form.title.value,
+        error: errorMsg,
+        isValid: false
+      };
+      newForm = { ...newForm, ...{ title: newField } };
+    } else {
+      const newField: Field = {
+        value: form.title.value,
+        error: '',
+        isValid: true
+      };
+      newForm = { ...newForm, ...{ title: newField } };
+    }
+
     //validator price
     if (!/^[0-9999999]{1,10}$/.test(form.price.value)) {
       const errorMsg: string = 'Entrez un prix correct';
@@ -104,7 +144,41 @@ const CreateLocationPage: FunctionComponent = () => {
       newForm = { ...newForm, ...{ price: newField } };
     }
 
-    console.log(newForm);
+    if (!/^[0-5]{1}$/.test(form.stars.value)) {
+      const errorMsg: string = 'Notes compris entre 1 et 5';
+      const newField: Field = {
+        value: form.stars.value,
+        error: errorMsg,
+        isValid: false
+      };
+      newForm = { ...newForm, ...{ stars: newField } };
+    } else {
+      const newField: Field = {
+        value: form.stars.value,
+        error: '',
+        isValid: true
+      };
+      newForm = { ...newForm, ...{ stars: newField } };
+    }
+
+    if (!/^[0-100]{1}$/.test(form.numberOfRooms.value)) {
+      const errorMsg: string = 'Veuillez renseigner le nombre de chambres';
+      const newField: Field = {
+        value: form.numberOfRooms.value,
+        error: errorMsg,
+        isValid: false
+      };
+      newForm = { ...newForm, ...{ numberOfRooms: newField } };
+    } else {
+      const newField: Field = {
+        value: form.numberOfRooms.value,
+        error: '',
+        isValid: true
+      };
+      newForm = { ...newForm, ...{ numberOfRooms: newField } };
+    }
+
+    //console.log(newForm);
     setForm(newForm);
     return newForm.price.isValid && newForm.title.isValid;
   };
@@ -121,6 +195,7 @@ const CreateLocationPage: FunctionComponent = () => {
       location.numberOfRooms = form.numberOfRooms.value;
       location.price = form.price.value;
       location.categoryId = form.categoryId.value;
+      location.category = form.category.value;
       addLocation();
     }
   };
@@ -131,7 +206,7 @@ const CreateLocationPage: FunctionComponent = () => {
 
   return (
     <div className="row">
-      <h2 className="font-bold flex justify-center text-3xl text-emerald-300 font-inter m-5">
+      <h2 className="font-bold flex justify-center text-3xl text-vert font-inter m-5">
         Ajouter une location
       </h2>
       <div className="border rounded md:mt-0 md:col-span-2 m-14">
@@ -275,13 +350,23 @@ const CreateLocationPage: FunctionComponent = () => {
                 </label>
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="categoryId"
-                  type="number"
+                  id="category"
+                  type="text"
                   placeholder="Categorie"
-                  name="categoryId"
-                  value={form.categoryId.value}
+                  name="category"
+                  list="select"
+                  value={form.category.value}
                   onChange={(e) => handleInputChange(e)}
                 />
+                <datalist id="select">
+                  {categoryList.map((cat) => {
+                    return (
+                      <option key={cat.id} value={cat.name}>
+                        {cat.name}
+                      </option>
+                    );
+                  })}
+                </datalist>
                 {/* error */}
                 {form.categoryId.error && (
                   <div className="card-panel red accent-1">{form.categoryId.error}</div>
@@ -292,7 +377,7 @@ const CreateLocationPage: FunctionComponent = () => {
           <div className="px-4 py-3 bg-gray-50 text-center sm:px-6">
             <button
               type="submit"
-              className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-emerald-300 hover:bg-emerald-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
+              className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-emerald-300 hover:bg-vert focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
               Ajouter
             </button>
           </div>

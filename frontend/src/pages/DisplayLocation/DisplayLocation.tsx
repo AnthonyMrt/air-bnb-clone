@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import CardForm from '../../components/Forms/CardForm';
 import { LocationDTO } from '../../services/dto/location.dto';
-// import Card from '../../components/Card/Card';
 import LocationAPI from '../../services/services';
 
 type DisplayLocationPageProps = {};
@@ -25,7 +24,7 @@ const DisplayLocationPage: React.FC<DisplayLocationPageProps> = () => {
     fetchAllLocation();
   }, [id]);
 
-  console.log(locations);
+  //console.log(locations);
   // Create a function to handle price change and persist it to database
 
   // Create a function to delete the location and persist it to database

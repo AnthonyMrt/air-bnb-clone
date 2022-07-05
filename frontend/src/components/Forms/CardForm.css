@@ -23,9 +23,6 @@
 
 .button {
   cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  outline: none;
   /* box-shadow: 0 9px #999; */
 }
 

@@ -58,7 +58,7 @@
   align-items: center;
   justify-content: flex-end;
   gap: 40px;
-  width: 15vw;
+  width: fit-content;
 }
 
 .header__right > svg {

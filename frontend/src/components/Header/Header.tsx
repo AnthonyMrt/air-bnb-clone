@@ -29,7 +29,6 @@ const Header: React.FC<HeaderProps> = () => {
     }
 
     LocationAPI.searchLocation(term).then((locations) => setLocations(locations));
-    console.log(locations);
   };
 
   const handleClickForDetails = (): void => {
@@ -68,6 +67,9 @@ const Header: React.FC<HeaderProps> = () => {
           </div>
         </div>
         <div className="header__right">
+          <Link className="text-vert font-semibold font-inter" to="/locations/create">
+            Ajouter une location
+          </Link>
           <p>Become a host</p>
           <HiOutlineGlobeAlt />
           <HiOutlineMenu />
@@ -96,22 +98,22 @@ const Header: React.FC<HeaderProps> = () => {
                         </p>
                       </div>
                     </div>
-                    <div className="flex w-auto justify-around mx-5">
+                    <div className="flex mx-5">
                       <div className="">
                         <p className="font-inter text-sm text-gray-500">Notations</p>
-                        <p className="font-inter mt-2 text-center text-sm sm:text-sm md:text-xl 2xl:text-base text-gray-50">
+                        <p className="font-inter mt-2 text-center text-sm sm:text-sm md:text-sm 2xl:text-base text-gray-50">
                           {location.stars}
                         </p>
                       </div>
                       <div className="ml-12">
                         <p className="font-inter text-sm text-gray-500">chambres</p>
-                        <p className="font-inter mt-2 text-base sm:text-lg md:text-xl 2xl:text-base text-gray-50">
+                        <p className="font-inter mt-2 text-base sm:text-lg md:text-sm 2xl:text-base text-gray-50">
                           {location.numberOfRooms} rooms
                         </p>
                       </div>
                       <div className="ml-12">
                         <p className="font-inter text-sm text-gray-500">prix</p>
-                        <p className="font-inter mt-2 text-base sm:text-lg md:text-xl 2xl:text-base text-gray-50">
+                        <p className="font-inter mt-2 text-base sm:text-sm md:text-sm 2xl:text-base text-gray-50">
                           € {priceFormater(location.price)}
                         </p>
                       </div>

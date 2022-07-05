@@ -1,11 +1,18 @@
 import Location from '../models/location';
 import { LocationDTO } from './dto/location.dto';
+import { CategoriesDTO } from './dto/categories.dto';
 
 export default class LocationAPI {
   static async getAll(): Promise<LocationDTO[]> {
     return await fetch('http://localhost:8000/locations')
       .then((response) => response.json())
       .then((data) => (this.isEmpty(data) ? null : data))
+      .catch((error) => this.handleError(error));
+  }
+
+  static async getCategories(): Promise<CategoriesDTO[]> {
+    return await fetch(`http://localhost:8000/categories`)
+      .then((response) => response.json())
       .catch((error) => this.handleError(error));
   }
 
@@ -16,6 +23,7 @@ export default class LocationAPI {
   }
 
   static async addLocation(location: Location): Promise<LocationDTO[]> {
+    console.log(location.category);
     return await fetch('http://localhost:8000/locations/create', {
       method: 'POST',
       body: JSON.stringify(location),

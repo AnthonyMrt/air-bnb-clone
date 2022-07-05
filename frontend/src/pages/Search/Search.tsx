@@ -3,19 +3,24 @@ import { LocationDTO } from '../../services/dto/location.dto';
 import LocationAPI from '../../services/services';
 import './Search.css';
 import Card from '../../components/Card/Card';
+import { CategoriesDTO } from '../../services/dto/categories.dto';
 
 type SearchPageProps = {};
 
 const SearchPage: React.FC<SearchPageProps> = () => {
   const [locations, setLocations] = useState<LocationDTO[]>([]);
+  const [categories, setCategories] = useState<CategoriesDTO[]>([]);
   const [orderBy, setOrderBy] = useState<String>('');
+  const [orderByCat, setOrderByCat] = useState<String>('');
 
   const tableHeader = ['Categorie', 'Chambres', 'Prix'];
 
   useEffect(() => {
     async function fetchAllLocation() {
       const resp = await LocationAPI.getAll();
+      const cat = await LocationAPI.getCategories();
 
+      setCategories(cat);
       setLocations(resp);
     }
 
@@ -27,12 +32,17 @@ const SearchPage: React.FC<SearchPageProps> = () => {
     e.preventDefault();
     const button: HTMLInputElement = e.currentTarget;
     setOrderBy(button.id);
-    console.log(e.currentTarget);
     if (orderBy === button.id) {
       setOrderBy(button.id + 'reverse');
     } else {
       setOrderBy(button.id);
     }
+  };
+
+  const handleCategoriesSorted = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    console.log(value);
+    setOrderByCat(value);
   };
 
   // Bonus: Create a search function linked to the search input in the header
@@ -41,6 +51,21 @@ const SearchPage: React.FC<SearchPageProps> = () => {
     <div className="search">
       <section className="m-2 border-b ">
         <ul className="flex justify-around ">
+          <li>
+            <select
+              className="py-2.5 px-0 w-full text-base text-gray-500 bg-transparent  border-gray-400 appearance-none dark:text-gray-500 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+              id="sortCat"
+              onChange={handleCategoriesSorted}>
+              <option value="">Filtrer par categorie</option>
+              {categories.map((cat) => {
+                return (
+                  <option key={cat.id} value={cat.name}>
+                    {cat.name}
+                  </option>
+                );
+              })}
+            </select>
+          </li>
           {tableHeader.map((el) => (
             <li key={el} className=" m-2 rounded-md">
               <input
@@ -59,8 +84,13 @@ const SearchPage: React.FC<SearchPageProps> = () => {
           ))}
         </ul>
       </section>
-      <div className="grid grid-cols-4">
+      <div className="grid grid-cols-4 gap-1">
         {locations
+          .filter((a) => {
+            if (orderByCat !== '') {
+              return a.category.name === orderByCat;
+            } else return locations;
+          })
           .sort((a, b) => {
             switch (orderBy) {
               case 'Categorie':
