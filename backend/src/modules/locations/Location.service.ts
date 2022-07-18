@@ -32,23 +32,29 @@ export class LocationService {
 
   async createLocation(location: LocationI): Promise<LocationI> {
     const category = await this.categoryRepository.findOne({
-      where: [{ name: location.category }],
+      where: [{ name: location.category[1] }],
     });
+
+    console.log(location);
+
     let newCat;
 
     if (!category) {
       newCat = await this.categoryRepository.save(
         this.categoryRepository.create({
-          name: String(location.category),
-          description: 'new drescription',
+          name: location.category[1],
+          description: 'new description',
         }),
       );
       const categoryId = newCat.id;
       location.categoryId = categoryId;
-      console.log(location);
     } else {
       location.category = category;
     }
+
+    console.log(location);
+    location.categoryId = category.id;
+    delete location['category'];
 
     return await this.locationRepository.save(
       this.locationRepository.create(location),

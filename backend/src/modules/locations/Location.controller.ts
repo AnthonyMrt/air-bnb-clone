@@ -7,9 +7,11 @@ import {
   Post,
   Put,
   Query,
+  //UseGuards,
 } from '@nestjs/common';
 import { LocationService } from './Location.service';
 import { LocationI } from './Locations.interface';
+//import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 
 @Controller('locations')
 export class LocationController {
@@ -17,6 +19,7 @@ export class LocationController {
   constructor(private readonly locationService: LocationService) {}
 
   /** List all locations in database with this endpoint */
+
   @Get()
   async getLocations() {
     return await this.locationService.getLocations();
@@ -29,19 +32,20 @@ export class LocationController {
   }
 
   //get Location By Name
-  @Get('/search/?')
+  @Get('/search?')
   async getLocationByname(@Query('title') title: string) {
     return this.locationService.searchLocation(title);
   }
 
   //create location
+  //@UseGuards(JwtAuthGuard)
   @Post('/create')
   async create(@Body() createLocationDto: LocationI) {
     const location = await this.locationService.createLocation(
       createLocationDto,
     );
     if (!location) {
-      return "Erreur dans la création de l'article";
+      return console.log("Erreur dans la création de l'article");
     }
     return location;
   }

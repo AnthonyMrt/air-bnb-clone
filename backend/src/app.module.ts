@@ -3,20 +3,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LocationModule } from './modules/locations/Location.module';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { GraphQLModule } from '@nestjs/graphql';
+// import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+// import { GraphQLModule } from '@nestjs/graphql';
 import { CategoriesModule } from './modules/categories/Categories.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver: ApolloDriver,
-      autoSchemaFile: 'schema.gql',
-      cors: {
-        origin: 'http://localhost:3000',
-        credentials: true,
-      },
-    }),
     TypeOrmModule.forRoot({
       name: 'default',
       type: 'postgres',
@@ -33,6 +27,8 @@ import { CategoriesModule } from './modules/categories/Categories.module';
     }),
     LocationModule,
     CategoriesModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

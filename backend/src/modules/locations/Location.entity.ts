@@ -3,9 +3,11 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Category } from '../categories/Category.entity';
+import { Users } from '../users/Users.entity';
 
 /**
  * This class represents a simplified version of a Location.
@@ -43,4 +45,8 @@ export class Location {
   @ManyToOne(() => Category, (cat) => cat.name)
   @JoinColumn({ name: 'category_id', referencedColumnName: 'id' })
   category: Category;
+
+  @ManyToOne(() => Users, (user) => user.id)
+  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
+  user: Users;
 }
