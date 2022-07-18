@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import AuthenticationService from '../../services/authentification.service';
 import * as Yup from 'yup';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import User from '../../models/user';
 import YupPassword from 'yup-password';
+import User from '../../models/user';
 YupPassword(Yup); // extend yup
 
 type userFormField = {

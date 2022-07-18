@@ -1,13 +1,13 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LocalStrategy } from './local.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from './constants';
-import { UsersModule } from 'src/modules/users/users.module';
-import { JwtStrategy } from './jwt.strategy';
 import { LocationController } from 'src/modules/locations/Location.controller';
 import { isAuthenticated } from 'src/app.middleware';
+import { UsersModule } from 'src/modules/users/users.module';
+import { jwtConstants } from './constants';
+import { LocalStrategy } from './local.strategy';
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
