@@ -1,7 +1,6 @@
-import { CategoriesDTO } from './categories.dto';
+import { CategoriesInt } from './categories.interface';
 
-/* eslint-disable no-unused-vars */
-export interface LocationDTO {
+export interface LocationInt {
   id: number;
   title: string;
   description: string;
@@ -11,5 +10,5 @@ export interface LocationDTO {
   numberOfRooms: number;
   price: number;
   categoryId: number;
-  category: CategoriesDTO;
+  category: CategoriesInt;
 }

@@ -9,7 +9,7 @@ export default class Location {
   numberOfRooms: number = 0;
   price: number = 0;
   categoryId: number = 0;
-  category: any;
+  category: [number, string, string] = [1000, '', ''];
   // 2. Définition des valeurs par défaut des propriétés d'une location.
   constructor(id: number) {
     // 3. Initialisation des propiétés d'une locations.

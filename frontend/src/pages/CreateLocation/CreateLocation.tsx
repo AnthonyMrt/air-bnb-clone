@@ -5,7 +5,7 @@ import './CreateLocation.css';
 import Location from '../../models/location';
 import LocationAPI from '../../services/services';
 import { useNavigate } from 'react-router-dom';
-import { CategoriesDTO } from '../../services/dto/categories.dto';
+import { CategoriesInt } from '../../interfaces/categories.interface';
 //import { LocationDTO } from '../../services/dto/location.dto';
 //import { CategoriesDTO } from '../../services/dto/categories.dto';
 
@@ -32,21 +32,30 @@ const CreateLocationPage: FunctionComponent = () => {
 
   const [id] = useState<number>(Math.floor(Math.random() * 100));
   const [location] = useState<Location>(new Location(id));
-  const [categories, setCategories] = useState<CategoriesDTO[]>([]);
+  const [categories, setCategories] = useState<CategoriesInt[]>([]);
 
   const [form, setForm] = useState<Form>({
     picture: { value: location.picture },
     title: { value: location.title, isValid: true },
     description: { value: location.description, isValid: true },
     location: { value: location.location, isValid: true },
-    stars: { value: location.stars, isValid: true },
-    numberOfRooms: { value: location.numberOfRooms, isValid: true },
-    price: { value: location.price, isValid: true },
+    stars: { value: '', isValid: true },
+    numberOfRooms: { value: '', isValid: true },
+    price: { value: '', isValid: true },
     categoryId: { value: location.categoryId, isValid: true },
-    category: { value: location.category }
+    category: { value: '' }
   });
 
   useEffect(() => {
+    const userConnected = localStorage.getItem('userStatus');
+
+    if (userConnected !== 'connected') {
+      alert('Vous devez etre connectez pour créer une nouvelle location');
+      setTimeout(() => {
+        navigate('/login');
+      }, 1000);
+    }
+
     async function fetchAllCategories() {
       const cat = await LocationAPI.getCategories();
 
@@ -106,22 +115,22 @@ const CreateLocationPage: FunctionComponent = () => {
     if (!/^[a-zA-Zàéè ]{3,150}$/.test(form.category.value)) {
       const errorMsg: string = 'Veuillez entre un nom de catégorie valide';
       const newField: Field = {
-        value: form.title.value,
+        value: form.category.value,
         error: errorMsg,
         isValid: false
       };
-      newForm = { ...newForm, ...{ title: newField } };
+      newForm = { ...newForm, ...{ category: newField } };
     } else {
       const newField: Field = {
-        value: form.title.value,
+        value: form.category.value,
         error: '',
         isValid: true
       };
-      newForm = { ...newForm, ...{ title: newField } };
+      newForm = { ...newForm, ...{ category: newField } };
     }
 
     //validator price
-    if (!/^[0-9999999]{1,10}$/.test(form.price.value)) {
+    if (!/^[0-9]{1,10}$/.test(form.price.value)) {
       const errorMsg: string = 'Entrez un prix correct';
       const newField: Field = {
         value: form.price.value,
@@ -155,7 +164,7 @@ const CreateLocationPage: FunctionComponent = () => {
       newForm = { ...newForm, ...{ stars: newField } };
     }
 
-    if (!/^[0-99]{1,2}$/.test(form.numberOfRooms.value)) {
+    if (!/^[0-9]{1,3}$/.test(form.numberOfRooms.value)) {
       const errorMsg: string = 'Veuillez renseigner le nombre de chambres';
       const newField: Field = {
         value: form.numberOfRooms.value,
@@ -173,7 +182,12 @@ const CreateLocationPage: FunctionComponent = () => {
     }
 
     setForm(newForm);
-    return newForm.price.isValid && newForm.title.isValid && newForm.stars.isValid;
+    return (
+      newForm.price.isValid &&
+      newForm.title.isValid &&
+      newForm.stars.isValid &&
+      newForm.category.isValid
+    );
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -188,13 +202,15 @@ const CreateLocationPage: FunctionComponent = () => {
       location.numberOfRooms = form.numberOfRooms.value;
       location.price = form.price.value;
       location.categoryId = form.categoryId.value;
-      location.category = form.category.value;
+      location.category = [id, form.category.value, 'new description'];
       addLocation();
     }
   };
 
   const addLocation = () => {
-    LocationAPI.addLocation(location).then(() => navigate(`/locations/create`));
+    console.log(location);
+    let token = localStorage.getItem('token');
+    LocationAPI.addLocation(location, token).then(() => navigate(`/locations/create`));
   };
 
   return (
@@ -363,8 +379,8 @@ const CreateLocationPage: FunctionComponent = () => {
                   })}
                 </datalist>
                 {/* error */}
-                {form.categoryId.error && (
-                  <div className="card-panel red accent-1">{form.categoryId.error}</div>
+                {form.category.error && (
+                  <div className="card-panel red accent-1">{form.category.error}</div>
                 )}
               </div>
             </div>

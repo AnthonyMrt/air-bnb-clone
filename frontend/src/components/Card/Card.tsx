@@ -2,10 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 //import { Link } from 'react-router-dom';
 // import { Link } from 'react-router-dom';
-import { LocationDTO } from '../../services/dto/location.dto';
+import { LocationInt } from '../../interfaces/location.interface';
 
 type CardProps = {
-  location: LocationDTO;
+  location: LocationInt;
 };
 
 const Card: React.FC<CardProps> = ({ location }) => {

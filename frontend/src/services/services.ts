@@ -1,33 +1,40 @@
 import Location from '../models/location';
-import { LocationDTO } from './dto/location.dto';
-import { CategoriesDTO } from './dto/categories.dto';
+import { CategoriesInt } from '../interfaces/categories.interface';
+import { LocationInt } from '../interfaces/location.interface';
 
 export default class LocationAPI {
-  static async getAll(): Promise<LocationDTO[]> {
+  static async getAll(): Promise<LocationInt[]> {
     return await fetch('http://localhost:8000/locations')
       .then((response) => response.json())
       .then((data) => (this.isEmpty(data) ? null : data))
       .catch((error) => this.handleError(error));
   }
 
-  static async getCategories(): Promise<CategoriesDTO[]> {
+  static async getCategories(): Promise<CategoriesInt[]> {
     return await fetch(`http://localhost:8000/categories`)
       .then((response) => response.json())
       .catch((error) => this.handleError(error));
   }
 
-  static async getLocationById(id: number): Promise<LocationDTO[]> {
-    return await fetch(`http://localhost:8000/locations/${id}`)
+  static async fetchCountries(): Promise<any> {
+    return await fetch('https://restcountries.com/v3.1/all')
       .then((response) => response.json())
       .catch((error) => this.handleError(error));
   }
 
-  static async addLocation(location: Location): Promise<LocationDTO[]> {
-    console.log(location.category);
+  static async getLocationById(id: number): Promise<LocationInt[]> {
+    return await fetch(`http://localhost:8000/locations/location/${id}`)
+      .then((response) => response.json())
+      .catch((error) => this.handleError(error));
+  }
+
+  static async addLocation(location: Location, token: string | null): Promise<LocationInt[]> {
+    console.log(location);
     return await fetch('http://localhost:8000/locations/create', {
       method: 'POST',
       body: JSON.stringify(location),
       headers: {
+        Authorization: 'Bearer ' + token,
         'Content-Type': 'application/json',
         Accept: 'application/json'
       }
@@ -36,7 +43,7 @@ export default class LocationAPI {
       .catch((error) => this.handleError(error));
   }
 
-  static async updateLocation(id: number, input: LocationDTO) {
+  static async updateLocation(id: number, input: LocationInt) {
     return await fetch(`http://localhost:8000/locations/update/${id}`, {
       method: 'PUT',
       body: JSON.stringify(input),
@@ -60,7 +67,7 @@ export default class LocationAPI {
       .catch((error) => this.handleError(error));
   }
 
-  static searchLocation(title: string): Promise<LocationDTO[]> {
+  static searchLocation(title: string): Promise<LocationInt[]> {
     return fetch(`http://localhost:8000/locations/search?title=${title}`)
       .then((response) => response.json())
       .catch((error) => this.handleError(error));

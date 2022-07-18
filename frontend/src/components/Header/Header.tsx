@@ -10,7 +10,7 @@ import './Header.css';
 import { Link } from 'react-router-dom';
 import Logo from '../../assets/img/HolisBnb.png';
 import LocationAPI from '../../services/services';
-import { LocationDTO } from '../../services/dto/location.dto';
+import { LocationInt } from '../../interfaces/location.interface';
 import { FaBed } from 'react-icons/fa';
 //import { GrCurrency } from 'react-icons/gr';
 
@@ -20,7 +20,7 @@ type HeaderProps = {
 
 const Header: React.FC<HeaderProps> = () => {
   const [term, setTerm] = useState<string>('');
-  const [locations, setLocations] = useState<LocationDTO[]>([]);
+  const [locations, setLocations] = useState<LocationInt[]>([]);
   const [searchProceed, setSearchProceed] = useState<boolean>(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -132,7 +132,22 @@ const Header: React.FC<HeaderProps> = () => {
                       </div>
                     </div>
                   </>
-                  {/* <div className="w-full flex items-center justify-center">
+                </li>
+              </Link>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <div></div>
+      )}
+    </div>
+  );
+};
+
+export default Header;
+
+{
+  /* <div className="w-full flex items-center justify-center">
                     <div className=" max-h-48 xl:w-2/4 sm:w-1/3 w-full 2xl:w-full flex flex-col items-center md:py-5 bg-gradient-to-r from-emerald-400 to-emerald-200 rounded-lg">
                       <div className="w-full flex items-center justify-center">
                         <div className="flex h flex-col items-center ">
@@ -167,17 +182,5 @@ const Header: React.FC<HeaderProps> = () => {
                         </div>
                       </div>
                     </div>
-                  </div> */}
-                </li>
-              </Link>
-            ))}
-          </ul>
-        </div>
-      ) : (
-        <div></div>
-      )}
-    </div>
-  );
-};
-
-export default Header;
+                  </div> */
+}

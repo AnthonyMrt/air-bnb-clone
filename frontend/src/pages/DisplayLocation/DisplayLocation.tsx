@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import CardForm from '../../components/Forms/CardForm';
-import { LocationDTO } from '../../services/dto/location.dto';
+import { LocationInt } from '../../interfaces/location.interface';
 import LocationAPI from '../../services/services';
 
 type DisplayLocationPageProps = {};
 
 const DisplayLocationPage: React.FC<DisplayLocationPageProps> = () => {
-  const [locations, setLocations] = useState<LocationDTO[]>([]);
+  const [locations, setLocations] = useState<LocationInt[]>([]);
   const { id } = useParams();
 
   useEffect(() => {

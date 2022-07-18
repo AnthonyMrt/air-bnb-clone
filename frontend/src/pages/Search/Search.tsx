@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { LocationDTO } from '../../services/dto/location.dto';
+import { LocationInt } from '../../interfaces/location.interface';
 import LocationAPI from '../../services/services';
 import './Search.css';
 import Card from '../../components/Card/Card';
-import { CategoriesDTO } from '../../services/dto/categories.dto';
+import { CategoriesInt } from '../../interfaces/categories.interface';
 
 type SearchPageProps = {};
 
 const SearchPage: React.FC<SearchPageProps> = () => {
-  const [locations, setLocations] = useState<LocationDTO[]>([]);
-  const [categories, setCategories] = useState<CategoriesDTO[]>([]);
+  const [locations, setLocations] = useState<LocationInt[]>([]);
+  const [categories, setCategories] = useState<CategoriesInt[]>([]);
   const [orderBy, setOrderBy] = useState<String>('');
   const [orderByCat, setOrderByCat] = useState<String>('');
 

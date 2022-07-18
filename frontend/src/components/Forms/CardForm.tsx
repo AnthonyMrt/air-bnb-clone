@@ -1,11 +1,11 @@
 import React, { FunctionComponent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LocationDTO } from '../../services/dto/location.dto';
+import { LocationInt } from '../../interfaces/location.interface';
 import LocationAPI from '../../services/services';
 import './CardForm.css';
 
 type Props = {
-  location: LocationDTO;
+  location: LocationInt;
   isEditForm: boolean;
 };
 
@@ -72,23 +72,6 @@ const LocationForm: FunctionComponent<Props> = ({ location, isEditForm }) => {
         };
         newForm = { ...newForm, ...{ picture: newField } };
       }
-    }
-
-    if (!/^[a-zA-Zàéè ]{3,150}$/.test(form.title.value)) {
-      const errorMsg: string = 'Le titre de la location est compris entre 3 et 150 charactères';
-      const newField: Field = {
-        value: form.title.value,
-        error: errorMsg,
-        isValid: false
-      };
-      newForm = { ...newForm, ...{ title: newField } };
-    } else {
-      const newField: Field = {
-        value: form.title.value,
-        error: '',
-        isValid: true
-      };
-      newForm = { ...newForm, ...{ title: newField } };
     }
 
     //validator price
